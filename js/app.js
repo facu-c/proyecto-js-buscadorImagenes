@@ -46,17 +46,26 @@ function mostrarAlerta(mensaje){
     }    
 }
 
-function buscarImagenes(){
+async function buscarImagenes(){
     const termino = document.querySelector('#termino').value;
     const key = '41668498-bac2415569ab0f7ff1210f985';
     const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}&page=${paginaActual}`;
 
-    fetch(url)
-        .then( respuesta => respuesta.json() )
-        .then( resultados => {
-            totalPaginas = calcularPaginas(resultados.totalHits);
-            mostrarImagenes(resultados.hits);
-        } );
+    // fetch(url)
+    //     .then( respuesta => respuesta.json() )
+    //     .then( resultados => {
+    //         totalPaginas = calcularPaginas(resultados.totalHits);
+    //         mostrarImagenes(resultados.hits);
+    //     } );
+    
+    try {
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        totalPaginas = calcularPaginas(resultados.totalHits);
+        mostrarImagenes(resultado.hits);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function mostrarImagenes(imagenes){
